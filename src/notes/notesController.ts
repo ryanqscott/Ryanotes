@@ -28,6 +28,12 @@ import { NoteExistsError } from "../errors/NoteExistsError";
     ): Promise<Note> {
       return new NotesService().get(title);
     }
+
+    @Response<ValidateErrorJSON>(422, "Validation Failed")
+    @Get()
+    public async getNotes(): Promise<Note[]> {
+      return new NotesService().getAll();
+    }
     
     @Response<ValidateErrorJSON>(422, "Validation Failed")
     @Response<NoteExistsError>(400, "Note already exists")

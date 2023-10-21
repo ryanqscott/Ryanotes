@@ -4,19 +4,29 @@ import moment from "moment";
 import { NoteExistsError } from "../errors/NoteExistsError";
 
 export type NoteCreationParams = Pick<Note, "title" | "text" >;
-
+const NOTES_DIRECTORY = "./data";
 export class NotesService {
   public get(title: string): Note {
-    if (!fs.existsSync(`./data/${title}.txt`)) {
+    if (!fs.existsSync(`${NOTES_DIRECTORY}/${title}.txt`)) {
       throw new Error('note with given title does not exist');
     }
-    const noteText = fs.readFileSync(`./data/${title}.txt`);
+    const noteText = fs.readFileSync(`${NOTES_DIRECTORY}/${title}.txt`);
     return JSON.parse(noteText.toString());
+  }
+
+  public getAll(): Note[] {
+    const notes: Note[] = [];
+    let currentNoteContent;
+    fs.readdirSync(NOTES_DIRECTORY).forEach(fileName => {
+      currentNoteContent = fs.readFileSync(`${NOTES_DIRECTORY}/${fileName}`)
+      notes.push(JSON.parse(currentNoteContent.toString()));
+    })
+    return notes;
   }
 
   public create(noteCreationParams: NoteCreationParams): void {
     const title = noteCreationParams.title;
-    if (fs.existsSync(`./data/${title}.txt`)) {
+    if (fs.existsSync(`${NOTES_DIRECTORY}/${title}.txt`)) {
       throw new NoteExistsError(`note with the title "${title}" already exists`);
     }
     const note: Note = {
@@ -24,7 +34,7 @@ export class NotesService {
       archived: false,
       ...noteCreationParams
     }
-    fs.writeFile(`./data/${title}.txt`, JSON.stringify(note), err => {
+    fs.writeFile(`${NOTES_DIRECTORY}/${title}.txt`, JSON.stringify(note), err => {
       console.error(err);
     });
   }

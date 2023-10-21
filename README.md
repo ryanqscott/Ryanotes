@@ -7,9 +7,10 @@ ___
 ### TODO
 
 new routes:  
-GET all notes  
 DELETE note  
 PATCH note -- update a note in place (or can use PUT here, undecided)  
+
+Unit tests
 
 Some sort of free text search query, over note titles  
 Same as above but over note body content  
