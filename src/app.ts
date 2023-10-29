@@ -1,4 +1,11 @@
-import express, {json, urlencoded, Response as ExResponse, Request as ExRequest, NextFunction} from "express";
+import express, {
+  json,
+  urlencoded,
+  Response as ExResponse,
+  Request as ExRequest,
+  NextFunction,
+} from "express";
+// @ts-ignore
 import { RegisterRoutes } from "../build/routes";
 import swaggerUi from "swagger-ui-express";
 import { ValidateError } from "tsoa";
@@ -15,6 +22,7 @@ app.use(json());
 
 app.use("/docs", swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
   return res.send(
+    // @ts-ignore
     swaggerUi.generateHTML(await import("../build/swagger.json"))
   );
 });
@@ -43,11 +51,11 @@ app.use(function errorHandler(
   if (err instanceof NoteExistsError) {
     return res.status(400).json({
       message: "Note already exists",
-      details: err.message
+      details: err.message,
     });
   }
   if (err instanceof Error) {
-    console.warn('unexpected error: ', err.message);
+    console.warn("unexpected error: ", err.message);
     return res.status(500).json({
       message: "Internal Server Error",
     });
