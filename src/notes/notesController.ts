@@ -1,18 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Path,
-  Post,
-  Route,
-  SuccessResponse,
-  Response,
-  Delete,
-} from "tsoa";
-import { Note } from "./note";
-import { NotesService, NoteCreationParams } from "./noteService";
+import { Body, Controller, Delete, Get, Path, Post, Response, Route, SuccessResponse } from "tsoa";
 import { NoteExistsError } from "../errors/NoteExistsError";
 import { NoteNotFoundError } from "../errors/NoteNotFoundError";
+import { Note } from "./note";
+import { NoteCreationParams, NotesService } from "./noteService";
 
 interface ValidateErrorJSON {
   message: "Validation failed";
@@ -38,9 +28,7 @@ export class NotesController extends Controller {
   @Response<NoteExistsError>(400, "Note already exists")
   @SuccessResponse("201", "Created")
   @Post()
-  public async createNote(
-    @Body() requestBody: NoteCreationParams
-  ): Promise<void> {
+  public async createNote(@Body() requestBody: NoteCreationParams): Promise<void> {
     this.setStatus(201);
     new NotesService().create(requestBody);
     return;

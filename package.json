@@ -8,14 +8,22 @@
     "build": "tsoa spec-and-routes && tsc --outDir build --experimentalDecorators",
     "start": "node build/src/server.js",
     "swagger": "tsoa swagger",
-    "clean": "rm -rf build/*"
+    "clean": "rm -rf build/*",
+    "prettier": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}'",
+    "prettier:check": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --check",
+    "prettier:format": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --write",
+    "prettier:differences": "prettier --config .prettierrc 'src/**/*.{js,jsx,ts,tsx}' --list-different"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/swagger-ui-express": "^4.1.4",
     "concurrently": "^8.2.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
+    "prettier-plugin-organize-imports": "^3.2.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
@@ -26,5 +34,38 @@
     "moment": "^2.29.4",
     "swagger-ui-express": "^5.0.0",
     "tsoa": "^5.1.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "prettier"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "prettier"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          "checksVoidReturn": {
+            "attributes": false,
+            "arguments": false
+          }
+        }
+      ],
+      "@typescript-eslint/no-floating-promises": [
+        "error",
+        {
+          "ignoreVoid": true
+        }
+      ],
+      "prettier/prettier": "error"
+    },
+    "parserOptions": {
+      "project": [
+        "tsconfig.json"
+      ]
+    }
   }
 }

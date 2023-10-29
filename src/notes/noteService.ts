@@ -1,8 +1,8 @@
 import fs from "fs";
-import { Note } from "./note";
 import moment from "moment";
 import { NoteExistsError } from "../errors/NoteExistsError";
 import { NoteNotFoundError } from "../errors/NoteNotFoundError";
+import { Note } from "./note";
 
 export type NoteCreationParams = Pick<Note, "title" | "text">;
 const NOTES_DIRECTORY = "./data";
@@ -35,21 +35,15 @@ export class NotesService {
   public create(noteCreationParams: NoteCreationParams): void {
     const title = noteCreationParams.title;
     if (fs.existsSync(`${NOTES_DIRECTORY}/${title}.txt`)) {
-      throw new NoteExistsError(
-        `note with the title "${title}" already exists`
-      );
+      throw new NoteExistsError(`note with the title "${title}" already exists`);
     }
     const note: Note = {
       lastModified: moment().format(),
       archived: false,
-      ...noteCreationParams,
+      ...noteCreationParams
     };
-    fs.writeFile(
-      `${NOTES_DIRECTORY}/${title}.txt`,
-      JSON.stringify(note),
-      (err) => {
-        console.error(err);
-      }
-    );
+    fs.writeFile(`${NOTES_DIRECTORY}/${title}.txt`, JSON.stringify(note), (err) => {
+      console.error(err);
+    });
   }
 }

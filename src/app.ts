@@ -1,21 +1,21 @@
 import express, {
-  json,
-  urlencoded,
-  Response as ExResponse,
   Request as ExRequest,
+  Response as ExResponse,
   NextFunction,
+  json,
+  urlencoded
 } from "express";
-// @ts-ignore
-import { RegisterRoutes } from "../build/routes";
 import swaggerUi from "swagger-ui-express";
 import { ValidateError } from "tsoa";
+// @ts-ignore
+import { RegisterRoutes } from "../build/routes";
 import { NoteExistsError } from "./errors/NoteExistsError";
 
 export const app = express();
 
 app.use(
   urlencoded({
-    extended: true,
+    extended: true
   })
 );
 app.use(json());
@@ -31,7 +31,7 @@ RegisterRoutes(app);
 
 app.use(function notFoundHandler(_req, res: ExResponse) {
   res.status(404).send({
-    message: "Not Found",
+    message: "Not Found"
   });
 });
 
@@ -45,19 +45,19 @@ app.use(function errorHandler(
     console.warn(`Caught Validation Error for ${req.path}:`, err.fields);
     return res.status(422).json({
       message: "Validation Failed",
-      details: err?.fields,
+      details: err?.fields
     });
   }
   if (err instanceof NoteExistsError) {
     return res.status(400).json({
       message: "Note already exists",
-      details: err.message,
+      details: err.message
     });
   }
   if (err instanceof Error) {
     console.warn("unexpected error: ", err.message);
     return res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error"
     });
   }
 
